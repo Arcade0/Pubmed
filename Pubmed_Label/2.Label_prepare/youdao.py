@@ -3,7 +3,12 @@ import time
 import hashlib
 import uuid
 
+def mk_dir(file_path):
 
+    folder = os.path.exists(file_path)
+    if not folder:
+        os.makedirs(file_path)
+        
 def youdao_trans(translate_text):
 
     youdao_url = 'https://openapi.youdao.com/api'  # 有道api地址
@@ -27,8 +32,7 @@ def youdao_trans(translate_text):
     app_key = "rXB3wNMTCz70xQi0OTUDTKs9ZEExwkkb"  # 应用密钥
 
     sign = hashlib.sha256(
-        (app_id + input_text + str(uu_id) + str(time_curtime) +
-         app_key).encode('utf-8')).hexdigest()  # sign生成
+        (app_id + input_text + str(uu_id) + str(time_curtime) + app_key).encode('utf-8')).hexdigest()  # sign生成
 
     # 编辑输入
     data = {
@@ -47,3 +51,22 @@ def youdao_trans(translate_text):
     print(r)
     results = r["translation"][0]  # 获取翻译内容
     return results
+
+def trans(paper, input_path, output_path):
+    
+    # 添加翻译
+
+    with open(input_path + "/%s" % paper, "r") as f:
+        full = f.read()
+        f.close()
+    
+    import re
+    text_l = re.findall(r'.{5000}', full)
+    
+    full_cn = full + "\n"
+    for i in text_l:
+        full_cn = full_cn + youdao_trans(i)
+    
+    with open(output_path + "/%s" % paper, "w") as f:
+        f.write(full_cn)
+        f.close()
