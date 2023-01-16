@@ -1,11 +1,6 @@
 import re
 import os
-
-def mk_dir(file_path):
-    folder = os.path.exists(file_path)
-    if not folder:
-        os.makedirs(file_path)
-
+import string
 _known = {
     'zero': 0,
     'one': 1,
@@ -42,6 +37,11 @@ _known = {
     'hundred': 100,
     "thousand": 1000
     }
+def mk_dir(file_path):
+    folder = os.path.exists(file_path)
+    if not folder:
+        os.makedirs(file_path)
+
 def spoken_word_to_number(n):
     
     """Assume n is a positive integer".
@@ -61,6 +61,7 @@ def spoken_word_to_number(n):
     assert spoken_word_to_number('nine thousand nine hundred') == 9900
     assert spoken_word_to_number('one thousand nine hundred one') == 1901
     """
+    
     n = n.lower().strip()
     
     if n in _known:
@@ -68,6 +69,7 @@ def spoken_word_to_number(n):
     else:
         inputWordArr = re.split('[ -]', n)
     print(inputWordArr)
+    
     assert len(inputWordArr) > 1 #all single words are known
     #Check the pathological case where hundred is at the end or thousand is at end
     if inputWordArr[-1] == 'hundred':
@@ -133,6 +135,7 @@ def cut_digit(sen):
         sen = sen.replace(mm, mm.replace(",", ""))
     
     return sen
+
 dig_list = ['zero', 'one', 'a', 'an', 'case', 'two', 'both', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 
             'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 
             'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'hundred', 'thousand','million', "and"]
