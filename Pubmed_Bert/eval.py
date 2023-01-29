@@ -58,16 +58,16 @@ def multiclass_score(standard, prediction):
                             prediction["prediction"])
     precision = precision_score(standard["golden"],
                                 prediction["prediction"],
-                                average='weighted'
-                                )
+                                average='weighted',
+                                zero_division=1)
     recall = recall_score(standard["golden"],
                         prediction["prediction"],
-                        average='weighted'
-                        )
+                        average='weighted',
+                        zero_division=1)
     f1 = f1_score(standard["golden"],
                 prediction["prediction"],
-                average='weighted'
-                )
+                average='weighted',
+                zero_division=1)
 
     print("结果:", accuracy, precision, recall, f1)
     return accuracy, precision, recall, f1

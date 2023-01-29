@@ -33,7 +33,7 @@ def train_yn(id, que, ans, context):
     
     return qa
 
-def test_yn(id, que, ans, context):
+def test_yn(id, que, context):
     
     qa = {
         'qas': [{
