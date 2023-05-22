@@ -1,0 +1,264 @@
+# num
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=1e-4
+export NUM_EPOCHS=5
+export MAX_LENGTH=128
+export SEED=0
+for i in {1..10}
+do
+    rm -r ../eval/evl_num/output_$i
+    export SAVE_DIR=../eval/evl_num/output_$i
+    export DATA_DIR=../eval/evl_num/input_$i
+
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+        --do_train \
+        --train_file ${DATA_DIR}/train_set.json  \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --learning_rate ${LEARNING_RATE} \
+        --num_train_epochs ${NUM_EPOCHS} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --output_dir ${SAVE_DIR}
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/7B_golden.json \
+        --per_gpu_eval_batch_size ${BATCH_SIZE} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+    find . -name "cached*"|xargs rm -rfv
+done
+rm -r ../eval/evl_num/output_11
+export SAVE_DIR=../eval/evl_num/output_11
+export DATA_DIR=../input/input_num
+python run_factoid.py \
+    --model_type bert \
+    --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+    --do_train \
+    --train_file ${DATA_DIR}/train_set.json  \
+    --per_gpu_train_batch_size ${BATCH_SIZE} \
+    --learning_rate ${LEARNING_RATE} \
+    --num_train_epochs ${NUM_EPOCHS} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --output_dir ${SAVE_DIR}
+export DATA_DIR=../eval/evl_num/input_11
+# Evaluation
+python run_factoid.py \
+    --model_type bert \
+    --model_name_or_path ${SAVE_DIR} \
+    --do_eval \
+    --predict_file ${DATA_DIR}/test_set.json \
+    --golden_file ${DATA_DIR}/7B_golden.json \
+    --per_gpu_eval_batch_size ${BATCH_SIZE} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --official_eval_dir ${OFFICIAL_DIR} \
+    --output_dir ${SAVE_DIR}
+find . -name "cached*"|xargs rm -rfv
+
+# age
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=1e-4
+export NUM_EPOCHS=5
+export MAX_LENGTH=128
+export SEED=0
+for i in {1..10}
+do
+    rm -r ../eval/evl_age/output_$i
+    export SAVE_DIR=../eval/evl_age/output_$i
+    export DATA_DIR=../eval/evl_age/input_$i
+    
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+        --do_train \
+        --train_file ${DATA_DIR}/train_set.json  \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --learning_rate ${LEARNING_RATE} \
+        --num_train_epochs ${NUM_EPOCHS} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --output_dir ${SAVE_DIR}
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/7B_golden.json \
+        --per_gpu_eval_batch_size ${BATCH_SIZE} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+    find . -name "cached*"|xargs rm -rfv
+done
+rm -r ../eval/evl_age/output_11
+export SAVE_DIR=../eval/evl_age/output_11
+export DATA_DIR=../input/input_age
+python run_factoid.py \
+    --model_type bert \
+    --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+    --do_train \
+    --train_file ${DATA_DIR}/train_set.json  \
+    --per_gpu_train_batch_size ${BATCH_SIZE} \
+    --learning_rate ${LEARNING_RATE} \
+    --num_train_epochs ${NUM_EPOCHS} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --output_dir ${SAVE_DIR}
+export DATA_DIR=../eval/evl_age/input_11
+# Evaluation
+python run_factoid.py \
+    --model_type bert \
+    --model_name_or_path ${SAVE_DIR} \
+    --do_eval \
+    --predict_file ${DATA_DIR}/test_set.json \
+    --golden_file ${DATA_DIR}/7B_golden.json \
+    --per_gpu_eval_batch_size ${BATCH_SIZE} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --official_eval_dir ${OFFICIAL_DIR} \
+    --output_dir ${SAVE_DIR}
+find . -name "cached*"|xargs rm -rfv
+
+
+# gender
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=1e-4
+export NUM_EPOCHS=5
+export MAX_LENGTH=128
+export SEED=0
+for i in {1..10}
+do
+    rm -r ../eval/evl_gender/output_$i
+    export SAVE_DIR=../eval/evl_gender/output_$i
+    export DATA_DIR=../eval/evl_gender/input_$i
+    
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+        --do_train \
+        --train_file ${DATA_DIR}/train_set.json  \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --learning_rate ${LEARNING_RATE} \
+        --num_train_epochs ${NUM_EPOCHS} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --output_dir ${SAVE_DIR}
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/7B_golden.json \
+        --per_gpu_eval_batch_size ${BATCH_SIZE} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+    find . -name "cached*"|xargs rm -rfv
+done
+rm -r ../eval/evl_gender/output_11
+export SAVE_DIR=../eval/evl_gender/output_11
+export DATA_DIR=../input/input_gender
+python run_factoid.py \
+    --model_type bert \
+    --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+    --do_train \
+    --train_file ${DATA_DIR}/train_set.json  \
+    --per_gpu_train_batch_size ${BATCH_SIZE} \
+    --learning_rate ${LEARNING_RATE} \
+    --num_train_epochs ${NUM_EPOCHS} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --output_dir ${SAVE_DIR}
+export DATA_DIR=../eval/evl_gender/input_11
+# Evaluation
+python run_factoid.py \
+    --model_type bert \
+    --model_name_or_path ${SAVE_DIR} \
+    --do_eval \
+    --predict_file ${DATA_DIR}/test_set.json \
+    --golden_file ${DATA_DIR}/7B_golden.json \
+    --per_gpu_eval_batch_size ${BATCH_SIZE} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --official_eval_dir ${OFFICIAL_DIR} \
+    --output_dir ${SAVE_DIR}
+find . -name "cached*"|xargs rm -rfv
+
+# evi
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=1e-4
+export NUM_EPOCHS=5
+export MAX_LENGTH=128
+export SEED=0
+for i in {1..10}
+do
+    rm -r ../eval/evl_evi/output_$i
+    export SAVE_DIR=../eval/evl_evi/output_$i
+    export DATA_DIR=../eval/evl_evi/input_$i
+    
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+        --do_train \
+        --train_file ${DATA_DIR}/train_set.json  \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --learning_rate ${LEARNING_RATE} \
+        --num_train_epochs ${NUM_EPOCHS} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --output_dir ${SAVE_DIR}
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/7B_golden.json \
+        --per_gpu_eval_batch_size ${BATCH_SIZE} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+    find . -name "cached*"|xargs rm -rfv
+done
+rm -r ../eval/evl_evi/output_11
+export SAVE_DIR=../eval/evl_evi/output_11
+export DATA_DIR=../input/input_evi
+python run_factoid.py \
+    --model_type bert \
+    --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+    --do_train \
+    --train_file ${DATA_DIR}/train_set.json  \
+    --per_gpu_train_batch_size ${BATCH_SIZE} \
+    --learning_rate ${LEARNING_RATE} \
+    --num_train_epochs ${NUM_EPOCHS} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --output_dir ${SAVE_DIR}
+export DATA_DIR=../eval/evl_evi/input_11
+# Evaluation
+python run_factoid.py \
+    --model_type bert \
+    --model_name_or_path ${SAVE_DIR} \
+    --do_eval \
+    --predict_file ${DATA_DIR}/test_set.json \
+    --golden_file ${DATA_DIR}/7B_golden.json \
+    --per_gpu_eval_batch_size ${BATCH_SIZE} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --official_eval_dir ${OFFICIAL_DIR} \
+    --output_dir ${SAVE_DIR}
+find . -name "cached*"|xargs rm -rfv

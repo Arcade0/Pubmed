@@ -1,0 +1,84 @@
+export MOD_DIR=../output/output_pat
+export DATA_DIR=../input/input_pat
+export SAVE_DIR=../output/output_pat
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=5e-5
+export NUM_EPOCHS=3
+export MAX_LENGTH=128
+export SEED=0
+
+# train
+python run_yesno.py \
+    --model_type bert \
+    --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+    --do_train \
+    --train_file ${DATA_DIR}/train_set.json \
+    --per_gpu_train_batch_size ${BATCH_SIZE} \
+    --learning_rate ${LEARNING_RATE} \
+    --num_train_epochs ${NUM_EPOCHS} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --output_dir ${SAVE_DIR}
+
+
+export MOD_DIR=../output/output_pat
+export DATA_DIR=../input/input_pat
+export SAVE_DIR=../output/output_pat
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=32
+export LEARNING_RATE=8e-6
+export NUM_EPOCHS=3
+export MAX_LENGTH=128
+export SEED=0
+
+# Evaluation and Prediction
+python run_yesno.py \
+    --model_type bert \
+    --model_name_or_path ${MOD_DIR} \
+    --do_eval \
+    --predict_file ${DATA_DIR}/test_set.json \
+    --golden_file ${DATA_DIR}/7B_golden.json \
+    --per_gpu_train_batch_size ${BATCH_SIZE} \
+    --official_eval_dir ${OFFICIAL_DIR} \
+    --output_dir ${SAVE_DIR}
+rm  ../output/output_pat/cached_dev_output_pat_384
+mv ../output/output_pat/predictions_.json.json ../output/output_pat
+
+#验证与预测
+rm -r ../eval/evl_pat_
+
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=5e-5
+export NUM_EPOCHS=3
+export MAX_LENGTH=128
+export SEED=0
+for i in {1..10}
+do
+    export DATA_DIR=../eval/evl_pat/input_$i
+    export SAVE_DIR=../eval/evl_pat/output_$i
+
+    python run_yesno.py \
+        --model_type bert \
+        --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+        --do_train \
+        --train_file ${DATA_DIR}/train_set.json \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --learning_rate ${LEARNING_RATE} \
+        --num_train_epochs ${NUM_EPOCHS} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --output_dir ${SAVE_DIR}
+
+    # Evaluation and Prediction
+    python run_yesno.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/eval_set.json \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+done

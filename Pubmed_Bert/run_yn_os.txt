@@ -1,0 +1,36 @@
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=32
+export LEARNING_RATE=3e-5
+export NUM_EPOCHS=3
+export MAX_LENGTH=128
+export SEED=0
+for i in {1..10}
+do
+    export DATA_DIR=../eval/evl_os/input_$i
+    export SAVE_DIR=../eval/evl_os/output_$i
+
+    python run_yesno.py \
+    --model_type bert \
+    --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+    --do_train \
+    --train_file ${DATA_DIR}/train_set.json \
+    --per_gpu_train_batch_size ${BATCH_SIZE} \
+    --learning_rate ${LEARNING_RATE} \
+    --num_train_epochs ${NUM_EPOCHS} \
+    --max_seq_length ${MAX_LENGTH} \
+    --seed ${SEED} \
+    --output_dir ${SAVE_DIR}
+    
+
+    # Evaluation and Prediction
+    python run_yesno.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/eval_set.json \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+done
+rm -r ../eval/evl_immu

@@ -1,76 +1,54 @@
-__author__ = 'Qiao Jin'
-import os
-import glob
+# 检索
 import json
-import xml.etree.ElementTree as ET
+spec_d = {}
+spec_papers_d = {}
+for i in ["Bactology", "Mycology", "Virology"]:
 
-files = os.listdir("pubmed_2022")
-files.sort()
-for xml_path in files:
+    with open("specs_list/%s.txt" % (i), "r") as f:
+        specs = [i.replace("\"", "").replace("\n", "").lower() for i in f.readlines()]
     
-    check = os.path.exists("pubmed_2022d/%s" % xml_path.replace("xml", "json"))
-    if not check:
-        print('Processing %s' % xml_path)
-        output = {}
+    spec_paper_d = {}
+    for spec in specs:
+        spec_paper_d[spec] = []
+    spec_papers_d[i] = spec_paper_d
 
-        tree = ET.parse("pubmed_2022/%s" % xml_path)
-        root = tree.getroot()
+iter_list = set(range(100, 1114, 100))
+iter_list.add(1114)
+for i in iter_list:
 
-        for citation in root.iter('MedlineCitation'):
-            
-            # 获取pmid
-            pmid = citation.find('PMID')
-            if pmid == None:
-                continue
-            else:
-                pmid = pmid.text
-            
-            #获取标题
-            texts = {}
-            title = citation.find('Article/ArticleTitle')
-            if title is None:
-                texts["Title"] = ""
-            else:
-                texts["Title"] = " ".join(title.itertext())
-            
-            # 获取期刊
-            journal = citation.find("Article/Journal/Title")
-            if journal is None:
-                texts["Journal"] = ""
-            else:
-                texts["Journal"] = " ".join(journal.itertext())
-                
-            # 获取摘要，摘要存在分段
-            info_l = []
-            for info in citation.iter('AbstractText'):
-                if info is None:
-                    abstract = ""
-                if info is not None:
-                    abstract = " ".join(info.itertext())
-                    info_l.append(abstract)
-            texts["Ab"] = texts["Title"] + " " + " ".join(info_l)
-            
-            # 存取mesh词汇
-            MHs = []
-            mesh = citation.find("MeshHeadingList")
-            if  mesh is None:
-                MHs = []
-            else:
-                for MH in mesh:
-                    MHs.append([mh.text for mh in MH])
-
-            # 存取日期
-            date = citation.find("DateCompleted/Year")
-            if  date is None:
-                dates = ""
-            else:
-                dates = date.text
-            
-            output[pmid] = {'pmid': pmid,
-                            'texts': texts,
-                            'Meshhead':MHs,
-                            "date":dates}
+    with open("words_dic/words_dic_%s.txt" % i, "r") as f:
+        content = f.read()
+        words_dic = json.loads(content)
+    print("read: words_dic_%s.txt" % i)
+    
+    for k,v in words_dic.items():
+        words_dic[k] = set(v)
         
-        with open('pubmed_2022d/%s.json' % xml_path.split('.')[0], 'w') as f:
-            json.dump(output, f, indent=4)
-            f.close()
+    for spec_type in spec_papers_d:
+                    
+        spec_paper_d = spec_papers_d[spec_type]
+        
+        for spec in spec_paper_d: 
+
+            term = spec.lower().split(" ")
+            if spec_type in ["Bactology", "Mycology"]:
+                if len(term) > 1:
+                    term_set = words_dic.setdefault(term[0][0], {0}) | words_dic.setdefault(term[0], {0})
+                else:
+                    term_set = words_dic.setdefault(term[0], {0})
+            else:
+                term_set = words_dic.setdefault(term[0], {0})
+
+            for j in range(1,len(term)):
+                term_set = term_set & words_dic.setdefault(term[j],{0})
+
+            spec_paper_d[spec] = spec_paper_d[spec]+ list(term_set)
+        
+        spec_papers_d[spec_type] = spec_paper_d
+
+    print("search finished: words_dic_%s.txt" % i)
+
+    del(words_dic)
+    with open("search_results/search_results.txt", "w") as f:
+        a = json.dumps(spec_papers_d)
+        f.write(a)

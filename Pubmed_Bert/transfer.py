@@ -19,23 +19,19 @@ def trans_num(df, col):
     for i in df.index:
     
         if len({"a", "an", "case"} & set(df.loc[i, col].lower().split(" "))) > 0:
-            clas = "1"
-        elif len({"both"} & set(df.loc[i, col].lower().split(" "))) > 0:
-            clas = "2-10"
-        elif len({"thousand"} & set(df.loc[i, col].lower().split(" "))) > 0:
-            clas = ">100"
+            clas = "1-9"
+        elif len({"hundred","thousand"} & set(df.loc[i, col].lower().split(" "))) > 0:
+            clas = "100以上"
         else:
             digit_list = spokentonumber.del_non_digit(df.loc[i, col])
             if (len(digit_list) > 0) & ("to" not in df.loc[i, col].lower()):
                 clasn = digit_list[0]
-                if int(clasn) == 1:
-                    clas = "1"
-                elif int(clasn) in range(2,11):
-                    clas = "2-10"
-                elif int(clasn) in range(11,101):
-                    clas = "11-100"
-                elif int(clasn) > 100:
-                    clas = ">100"
+                if int(clasn) in range(1,10):
+                    clas = "1-9"
+                elif int(clasn) in range(10,100):
+                    clas = "10-99"
+                elif int(clasn) >= 100:
+                    clas = "100以上"
                 else:
                     clas = "none"
             else:
@@ -50,31 +46,29 @@ def trans_age(df, col):
     for i in df.index:
 
         if len({"elder", "elderly", "older", "aging"} & set(df.loc[i, col].lower().split(" "))) > 0:
-            clas = ">65岁"
+            clas = "65岁以上"
         elif len({"adult", "adults", "middle","mature"} & set(df.loc[i, col].lower().split(" "))) > 0:
-            clas = "18-65岁"
+            clas = "18-64岁"
         elif len({"young", "younger", "child", "children",
                   "adolescent", "adolescents", 
-                  "paediatric", "pediatric"} & set(df.loc[i, col].lower().split(" "))) > 0:
+                  "pediatric"} & set(df.loc[i, col].lower().split(" "))) > 0:
             clas = "1-17岁"
         elif len({"infant", "infants", 
-                  "neonatus", "neonate","neonatal",
+                  "neonates", "neonate","neonatal",
                   "day", "days", "month", 
-                  "months", "months","premature"} & set(df.loc[i, col].lower().split(" "))) > 0:
+                  "months", "premature"} & set(df.loc[i, col].lower().split(" "))) > 0:
             clas = "1岁以下"
 
         else:
             digit_list = spokentonumber.del_non_digit(df.loc[i, col])
             if (len(digit_list) > 0) & ("to" not in df.loc[i, col].lower()):
                 clasn = digit_list[0]
-                if int(clasn) == 1:
-                    clas = "1岁以下"
-                elif int(clasn) in range(2,18):
+                if int(clasn) in range(1,18):
                     clas = "1-17岁"
-                elif int(clasn) in range(18,66):
-                    clas = "18-65岁"
-                elif int(clasn) in range(66,120):
-                    clas = ">65岁"
+                elif int(clasn) in range(18,65):
+                    clas = "18-64岁"
+                elif int(clasn) in range(65,120):
+                    clas = "65岁以上"
                 else:
                     clas = "none"
             else:
@@ -89,12 +83,11 @@ def trans_gender(df, col):
         
         if (len({"man", "men", "boy", "boys","male", "males", "he", 
                 "gentleman", "gentlemen", "his", "him"} & set(df.loc[i, col].lower().split(" "))) > 0) and (len({"woman", "women", "girl","girls", "female", 
-                    "females", "fm", "she", "lady", "ladys", "her"} & set(df.loc[i, col].lower().split(" ")))==0):
+                    "females", "fm", "she", "lady", "ladies", "her"} & set(df.loc[i, col].lower().split(" ")))==0):
                 clas = "男"
                 
         elif (len({"man", "men", "boy", "boys","male", "males", "he", 
-                "gentleman", "gentlemen", "his", "him"} & set(df.loc[i, col].lower().split(" "))) == 0) and (len({"woman", "women", "girl","girls", "female", 
-                    "females", "fm", "she", "lady", "ladys", "her"} & set(df.loc[i, col].lower().split(" ")))>0):
+                "gentleman", "gentlemen", "his", "him"} & set(df.loc[i, col].lower().split(" "))) == 0) and (len({"woman", "women", "girl","girls", "female", "females", "fm", "she", "lady", "ladies", "her"} & set(df.loc[i, col].lower().split(" ")))>0):
             clas = "女"
         else:
             clas = "none"

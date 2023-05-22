@@ -1,0 +1,152 @@
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=1e-4
+export NUM_EPOCHS=5
+export MAX_LENGTH=128
+export SEED=0
+
+for i in {1..5}
+do
+    rm -r ../output/output_num/output_$i
+    export SAVE_DIR=../output/output_num/output_$i
+    export DATA_DIR=../input/input_num/input_$i
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+        --do_train \
+        --train_file ${DATA_DIR}/train_set.json  \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --learning_rate ${LEARNING_RATE} \
+        --num_train_epochs ${NUM_EPOCHS} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --output_dir ${SAVE_DIR}
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/7B_golden.json \
+        --per_gpu_eval_batch_size ${BATCH_SIZE} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+    find . -name "cached*"|xargs rm -rfv
+done
+
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=1e-4
+export NUM_EPOCHS=5
+export MAX_LENGTH=128
+export SEED=0
+
+for i in {1..5}
+do
+    rm -r ../output/output_age/output_$i
+    export SAVE_DIR=../output/output_age/output_$i
+    export DATA_DIR=../input/input_age/input_$i
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+        --do_train \
+        --train_file ${DATA_DIR}/train_set.json  \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --learning_rate ${LEARNING_RATE} \
+        --num_train_epochs ${NUM_EPOCHS} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --output_dir ${SAVE_DIR}
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/7B_golden.json \
+        --per_gpu_eval_batch_size ${BATCH_SIZE} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+    find . -name "cached*"|xargs rm -rfv
+done
+
+
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=1e-4
+export NUM_EPOCHS=5
+export MAX_LENGTH=128
+export SEED=0
+
+for i in {1..5}
+do
+    rm -r ../output/output_gender/output_$i
+    export SAVE_DIR=../output/output_gender/output_$i
+    export DATA_DIR=../input/input_gender/input_$i
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+        --do_train \
+        --train_file ${DATA_DIR}/train_set.json  \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --learning_rate ${LEARNING_RATE} \
+        --num_train_epochs ${NUM_EPOCHS} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --output_dir ${SAVE_DIR}
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/7B_golden.json \
+        --per_gpu_eval_batch_size ${BATCH_SIZE} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+    find . -name "cached*"|xargs rm -rfv
+done
+
+
+export OFFICIAL_DIR=./scripts/bioasq_eval
+export BATCH_SIZE=16
+export LEARNING_RATE=1e-4
+export NUM_EPOCHS=5
+export MAX_LENGTH=128
+export SEED=0
+
+for i in {1..5}
+do
+    rm -r ../output/output_evi/output_$i
+    export SAVE_DIR=../output/output_evi/output_$i
+    export DATA_DIR=../input/input_evi/input_$i
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+        --do_train \
+        --train_file ${DATA_DIR}/train_set.json  \
+        --per_gpu_train_batch_size ${BATCH_SIZE} \
+        --learning_rate ${LEARNING_RATE} \
+        --num_train_epochs ${NUM_EPOCHS} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --output_dir ${SAVE_DIR}
+    python run_factoid.py \
+        --model_type bert \
+        --model_name_or_path ${SAVE_DIR} \
+        --do_eval \
+        --predict_file ${DATA_DIR}/test_set.json \
+        --golden_file ${DATA_DIR}/7B_golden.json \
+        --per_gpu_eval_batch_size ${BATCH_SIZE} \
+        --max_seq_length ${MAX_LENGTH} \
+        --seed ${SEED} \
+        --official_eval_dir ${OFFICIAL_DIR} \
+        --output_dir ${SAVE_DIR}
+    find . -name "cached*"|xargs rm -rfv
+done
+
+
+
